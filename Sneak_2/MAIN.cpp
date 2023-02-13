@@ -1,34 +1,356 @@
-#pragma once
+п»ї#pragma once
 #include "common.h"
 #include "Sneak.h"
+#include "MyMap.h"
+
 
 
 int width = 30, height = 15;
 
 void setObject(const HANDLE& h, const COORD& coord, const char& simbol, const int& color = 10)
 {
-	SetConsoleCursorPosition(h, coord); // отправляем курсор на позицию 
-	SetConsoleTextAttribute(h, color); // устанавливаем красный цвет для отрисовки
-	putchar(simbol);// печатаем символ
+	SetConsoleCursorPosition(h, coord);
+	SetConsoleTextAttribute(h, color); 
+	putchar(simbol);
 }
 
-
+int randomNumber(int first, int last)
+{
+	random_device r;
+	mt19937 gen(r());
+	uniform_int_distribution<> d(first, last);
+	return d(gen);
+}
 
 int main()
 {
 
 	system("cls");
-	srand(time(0)); // запуск генератора случайных чисел
-	system("mode con cols=100 lines=60"); // установка размеров окна консоли
-	MoveWindow(GetConsoleWindow(), -1000, 50, 1000, 600, true); // установка стартовой позиции окна консоли
-	CONSOLE_CURSOR_INFO cci = { sizeof(cci), false }; // создание параметров на отображение курсора
-	SetConsoleCursorInfo(h, &cci); //связывание параметров и хендла
+	srand(time(0)); // Р·Р°РїСѓСЃРє РіРµРЅРµСЂР°С‚РѕСЂР° СЃР»СѓС‡Р°Р№РЅС‹С… С‡РёСЃРµР»
+	system("mode con cols=100 lines=60"); // СѓСЃС‚Р°РЅРѕРІРєР° СЂР°Р·РјРµСЂРѕРІ РѕРєРЅР° РєРѕРЅСЃРѕР»Рё
+	MoveWindow(GetConsoleWindow(), -1000, 50, 1000, 600, true); // СѓСЃС‚Р°РЅРѕРІРєР° СЃС‚Р°СЂС‚РѕРІРѕР№ РїРѕР·РёС†РёРё РѕРєРЅР° РєРѕРЅСЃРѕР»Рё
+	CONSOLE_CURSOR_INFO cci = { sizeof(cci), false }; // СЃРѕР·РґР°РЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ РЅР° РѕС‚РѕР±СЂР°Р¶РµРЅРёРµ РєСѓСЂСЃРѕСЂР°
+	SetConsoleCursorInfo(h, &cci); //СЃРІСЏР·С‹РІР°РЅРёРµ РїР°СЂР°РјРµС‚СЂРѕРІ Рё С…РµРЅРґР»Р°
+	coordin c(10, 5);
+	MyMap map(15, 30, 7, c);
+	Sneak sneak1(map);
+	map.pushSneak(sneak1);
+	do
+	{
+		Sleep(200);
+		if (_kbhit())
+		{
+			int k = _getch();
+			sneak1.usersDecide(k);
+		}
+		coordin nextStep = sneak1.getHead() ;
+		nextStep.x += sneak1.getDX();
+		nextStep.y += sneak1.getDY();
 
+		if (nextStep.x > map.getLeftUpCorrner().x + map.getWidth() - 1 || nextStep.x < map.getLeftUpCorrner().x + 1 ||
+			nextStep.y > map.getLeftUpCorrner().y + map.getHeight() - 1|| nextStep.y < map.getLeftUpCorrner().y + 1)
+		{
+			map.gameContinue = 0;
+		}
+
+		if (nextStep == map.apple->getCoord())
+		{
+			sneak1.moveSneak(true);
+			map.putApple();
+		}
+		else if (map.thisPlaceFree(nextStep))
+		{
+			sneak1.moveSneak(false);
+		}
+		else
+		{
+			map.gameContinue = 0;
+		}
+
+
+
+
+
+	} while (map.gameContinue);
+
+	coordin cc = map.getLeftUpCorrner();
+	cc.x += (map.getWidth() / 2);
+	cc.y -= 2;
+
+	SetConsoleTextAttribute(h, 4);
+	while (true)
+	{
+		SetConsoleCursorPosition(h, cc.coordinToCOORD());
+		putchar(' ');
+		cout << "GAME OVER";
+		Sleep(500);
+		SetConsoleCursorPosition(h, cc.coordinToCOORD());
+		putchar(' ');
+		cout << "          ";
+		Sleep(500);
+
+	}
 	
-
-
-
 
 	_getch();
 	return 0;
 }
+
+
+//0 char:
+//1 char : вє
+//2 char : в»
+//3 char : в™Ґ
+//4 char : в™¦
+//5 char : в™Ј
+//6 char : в™ 
+//7 char :
+//	8 char :
+//	9 char :
+//	10 char :
+//
+//	11 char : в™‚
+//	12 char : в™Ђ
+//	13 char :
+//	14 char : в™«
+//	15 char : вј
+//	16 char : в–є
+//	17 char : в—„
+//	18 char : в†•
+//	19 char : вЂј
+//	20 char : В¶
+//	21 char : В§
+//	22 char : в–¬
+//	23 char : в†Ё
+//	24 char : в†‘
+//	25 char : в†“
+//	26 char : в†’
+//	27 char :
+//	8 char : в€џ
+//	29 char : в†”
+//	30 char : в–І
+//	31 char : в–ј
+//	32 char :
+//	33 char : !
+//	34 char : "
+//	35 char : #
+//	36 char : $
+//	37 char : %
+//	38 char : &
+//	39 char : '
+//	40 char: (
+//		41 char:)
+//	42 char : *
+//	43 char : +
+//	44 char : ,
+//	45 char : -
+//	46 char : .
+//	47 char : /
+//	48 char : 0
+//	49 char : 1
+//	50 char : 2
+//	51 char : 3
+//	52 char : 4
+//	53 char : 5
+//	54 char : 6
+//	55 char : 7
+//	56 char : 8
+//	57 char : 9
+//	58 char : :
+//	59 char : ;
+//60 char: <
+//	61 char : =
+//	62 char : >
+//	63 char : ?
+//	64 char : @
+//	65 char: A
+//	66 char : B
+//	67 char : C
+//	68 char : D
+//	69 char : E
+//	70 char : F
+//	71 char : G
+//	72 char : H
+//	73 char : I
+//	74 char : J
+//	75 char : K
+//	76 char : L
+//	77 char : M
+//	78 char : N
+//	79 char : O
+//	80 char : P
+//	81 char : Q
+//	82 char : R
+//	83 char : S
+//	84 char : T
+//	85 char : U
+//	86 char : V
+//	87 char : W
+//	88 char : X
+//	89 char : Y
+//	90 char : Z
+//	91 char : [
+//		92 char:\
+//		93 char:]
+//	94 char : ^
+//		95 char : _
+//		96 char : `
+//		97 char: a
+//		98 char : b
+//		99 char : c
+//		100 char : d
+//		101 char : e
+//		102 char : f
+//		103 char : g
+//		104 char : h
+//		105 char : i
+//		106 char : j
+//		107 char : k
+//		108 char : l
+//		109 char : m
+//		110 char : n
+//		111 char : o
+//		112 char : p
+//			113 char : q
+//			114 char : r
+//			115 char : s
+//			116 char : t
+//			117 char : u
+//			118 char : v
+//			119 char : w
+//			120 char : x
+//			121 char : y
+//			122 char : z
+//			123 char : {
+//			124 char: |
+//			125 char : }
+//			126 char : ~
+//			127 char : вЊ‚
+//			128 char : Рђ
+//			129 char : Р‘
+//			130 char : Р’
+//			131 char : Р“
+//			132 char : Р”
+//			133 char : Р•
+//			134 char : Р–
+//			135 char : Р—
+//			136 char : Р
+//			137 char : Р™
+//			138 char : Рљ
+//			139 char : Р›
+//			140 char : Рњ
+//			141 char : Рќ
+//			142 char : Рћ
+//			143 char : Рџ
+//			144 char : Р 
+//			145 char : РЎ
+//			146 char : Рў
+//			147 char : РЈ
+//			148 char : Р¤
+//			149 char : РҐ
+//			150 char : Р¦
+//			151 char : Р§
+//			152 char : РЁ
+//			153 char : Р©
+//			154 char : РЄ
+//			155 char : Р«
+//			156 char : Р¬
+//			157 char : Р­
+//			158 char : Р®
+//			159 char : РЇ
+//			160 char : Р°
+//			161 char : Р±
+//			162 char : РІ
+//			163 char : Рі
+//			164 char : Рґ
+//			165 char : Рµ
+//			166 char : Р¶
+//			167 char : Р·
+//			168 char : Рё
+//			169 char : Р№
+//			170 char : Рє
+//			171 char : Р»
+//			172 char : Рј
+//			173 char : РЅ
+//			174 char : Рѕ
+//			175 char : Рї
+//			176 char : в–‘
+//			177 char : в–’
+//			178 char : в–“
+//			179 char : в”‚
+//			180 char : в”¤
+//			181 char : в•Ў
+//			182 char : в•ў
+//			183 char : в•–
+//			184 char : в••
+//			185 char : в•Ј
+//			186 char : в•‘
+//			187 char : в•—
+//			188 char : в•ќ
+//			189 char : в•њ
+//			190 char : в•›
+//			191 char : в”ђ
+//			192 char : в””
+//			193 char : в”ґ
+//			194 char : в”¬
+//			195 char : в”њ
+//			196 char : в”Ђ
+//			197 char : в”ј
+//			198 char : в•ћ
+//			199 char : в•џ
+//			200 char : в•љ
+//			201 char : в•”
+//			202 char : в•©
+//			203 char : в•¦
+//			204 char : в• 
+//			205 char : в•ђ
+//			206 char : в•¬
+//			207 char : в•§
+//			208 char : в•Ё
+//			209 char : в•¤
+//			210 char : в•Ґ
+//			211 char : в•™
+//			212 char : в•
+//			213 char : в•’
+//			214 char : в•“
+//			215 char : в•«
+//			216 char : в•Є
+//			217 char : в”
+//			218 char : в”Њ
+//			219 char : в–€
+//			220 char : в–„
+//			221 char : в–Њ
+//			222 char : в–ђ
+//			223 char : в–Ђ
+//			224 char : СЂ
+//			225 char : СЃ
+//			226 char : С‚
+//			227 char : Сѓ
+//			228 char : С„
+//			229 char : С…
+//			230 char : С†
+//			231 char : С‡
+//			232 char : С€
+//			233 char : С‰
+//			234 char : СЉ
+//			235 char : С‹
+//			236 char : СЊ
+//			237 char : СЌ
+//			238 char : СЋ
+//			239 char : СЏ
+//			240 char : РЃ
+//			241 char : С‘
+//			242 char : Р„
+//			243 char : С”
+//			244 char : Р‡
+//			245 char : С—
+//			246 char : РЋ
+//			247 char : Сћ
+//			248 char : В°
+//			249 char : в€™
+//			250 char : В·
+//			251 char : в€љ
+//			252 char : в„–
+//			253 char : В¤
+//			254 char :
+

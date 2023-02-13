@@ -5,7 +5,10 @@
 #include <list>
 #include <ctime>
 #include <conio.h>
+#include <random>
 #include "coordin.h"
+
+
 
 using namespace std;
 
@@ -15,3 +18,5 @@ class Sneak;
 class Apple;
 class MyMap;
 class coodrin;
+int randomNumber(int first, int last);
+
