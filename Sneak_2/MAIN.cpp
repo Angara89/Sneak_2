@@ -24,7 +24,7 @@ int randomNumber(int first, int last)
 
 int main()
 {
-
+	char chooseMode = 'a';
 	system("cls");
 	srand(time(0)); // запуск генератора случайных чисел
 	system("mode con cols=100 lines=60"); // установка размеров окна консоли
@@ -35,14 +35,26 @@ int main()
 	MyMap map(15, 30, 7, c);
 	Sneak sneak1(map);
 	map.pushSneak(sneak1);
+
+
+	
 	do
 	{
-		Sleep(200);
-		if (_kbhit())
-		{
-			int k = _getch();
-			sneak1.usersDecide(k);
-		}
+		//Sleep(100);
+		//if (_kbhit() && chooseMode == 'm')
+		//{
+		//	int k = _getch();
+		//	if (k == 0 || k == 224)
+		//		k = _getch();
+		//	sneak1.usersDecide(k);
+		//}
+		//else if (chooseMode == 'a')
+		//{
+		//	sneak1.decide();
+		//}
+
+
+
 		coordin nextStep = sneak1.getHead() ;
 		nextStep.x += sneak1.getDX();
 		nextStep.y += sneak1.getDY();
@@ -67,11 +79,31 @@ int main()
 			map.gameContinue = 0;
 		}
 
+		Sleep(100);
+		if (_kbhit() && chooseMode == 'm')
+		{
+			int k = _getch();
+			if (k == 0 || k == 224)
+				k = _getch();
+			sneak1.usersDecide(k);
+		}
+		else if (chooseMode == 'a')
+		{
+			sneak1.decide();
+		}
 
 
 
 
 	} while (map.gameContinue);
+
+	coordin ccc = map.getLeftUpCorrner();
+	ccc.x += (map.getWidth() / 2);
+	ccc.y += (map.getHeight() + 3 );
+
+	SetConsoleCursorPosition(h, ccc.coordinToCOORD());
+	putchar(' ');
+	cout << "LastMove: " << sneak1.lastMoveText;
 
 	coordin cc = map.getLeftUpCorrner();
 	cc.x += (map.getWidth() / 2);

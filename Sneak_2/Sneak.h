@@ -14,21 +14,25 @@ private:
 	int dx;
 	int dy;
 
+	list<string> commands;
 
 
-
-
-	void drawSneak();
+	list<string> buildPath();
+	bool isPathRight();
 public:
+	string lastMove;
+	string lastMoveText;
+	void drawSneak();
 	MyMap* myMap;
 
 	Sneak(MyMap& map);
-
+	Sneak(Sneak& sneak);
 
 
 	void usersDecide(int k);
 	void moveSneak(bool eatApple = false);
 
+	void decide();
 
 
 
