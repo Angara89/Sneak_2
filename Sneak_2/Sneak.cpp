@@ -91,6 +91,7 @@ void Sneak::decide()
 	{
 		Sneak sneak(*this);
 		commands = sneak.buildPath();
+		this->lastMove = sneak.lastMove;
 	}
 	string command = commands.front();
 	commands.pop_front();
