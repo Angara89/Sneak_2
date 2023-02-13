@@ -50,7 +50,7 @@ COORD& coordin::coordinToCOORD()
 {
 	COORD coord;
 	coord.X = x;
-	coord.Y = y;
+	coord.Y = y; 
 	return coord;
 }
 
