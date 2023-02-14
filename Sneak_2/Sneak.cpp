@@ -448,6 +448,7 @@ do
 			tail.push_front(head);
 			tail.pop_back();
 		}
+
 		if (needCoord == head)
 		{
 			lastMove = needDirection;
