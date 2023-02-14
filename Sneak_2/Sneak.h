@@ -5,12 +5,10 @@
 class Sneak
 {
 private:
-	coordin head;
-	list<coordin> tail;
+
 	int length;
 	char simbolHead;
 	char simbolTail;
-	int color;
 	int dx;
 	int dy;
 
@@ -20,6 +18,9 @@ private:
 	list<string> buildPath();
 	bool isPathRight();
 public:
+	coordin head;
+	list<coordin> tail;
+	int color;
 	string lastMove;
 	string lastMoveText;
 	void drawSneak();
@@ -27,10 +28,11 @@ public:
 	int count1;
 	int count2;
 	int count3;
+	
 	Sneak(MyMap& map);
 	Sneak(Sneak& sneak);
 
-
+	list<coordin> tailMemory;
 	void usersDecide(int k);
 	void moveSneak(bool eatApple = false);
 
@@ -45,7 +47,7 @@ public:
 	int getLength();
 	coordin getHead();
 	list<coordin> getTail();
-	
+	void eraseSneak();
 	
 	
 	class SneakDecideEx

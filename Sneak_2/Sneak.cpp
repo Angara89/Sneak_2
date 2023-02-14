@@ -7,6 +7,81 @@ Sneak::Sneak(MyMap& map)
 	c.x = map.leftUpCorrner.x + (map.width / 2);
 	c.y = map.leftUpCorrner.y + (map.height / 2);
 	this->head = c;
+
+
+
+	c.x += 0;
+	c.y += 1;
+	tail.push_back(c);
+
+	c.x += 0;
+	c.y += 1;
+	tail.push_back(c);
+
+
+	c.x += 0;
+	c.y += 1;
+	tail.push_back(c);
+
+	c.x += 0;
+	c.y += 1;
+	tail.push_back(c);
+
+	c.x += 1;
+	c.y += 0;
+	tail.push_back(c);
+
+	c.x += 1;
+	c.y += 0;
+	tail.push_back(c);
+
+	c.x += 0;
+	c.y += -1;
+	tail.push_back(c);
+
+	c.x += 0;
+	c.y += -1;
+	tail.push_back(c);
+
+	c.x += 0;
+	c.y += -1;
+	tail.push_back(c);
+
+	c.x += 0;
+	c.y += -1;
+	tail.push_back(c);
+
+	c.x += 0;
+	c.y += -1;
+	tail.push_back(c);
+
+	c.x += -1;
+	c.y += 0;
+	tail.push_back(c);
+
+	c.x += -1;
+	c.y += 0;
+	tail.push_back(c);
+
+	c.x += -1;
+	c.y += 0;
+	tail.push_back(c);
+
+	c.x += -1;
+	c.y += 0;
+	tail.push_back(c);
+
+	c.x += -1;
+	c.y += 0;
+	tail.push_back(c);
+
+	c.x += -1;
+	c.y += 0;
+	tail.push_back(c);
+
+
+
+
 	myMap = &map;
 	this->length = 1;
 	this->simbolHead = 1;
@@ -15,6 +90,7 @@ Sneak::Sneak(MyMap& map)
 	this->dx = 0;
 	this->dy = -1;
 	this->lastMove = "up";
+
 
 }
 
@@ -113,6 +189,9 @@ void Sneak::decide()
 			cout << "Iter: " << ex.iter1 << " iter2: " << ex.iter2;
 		}
 		this->lastMove = sneak.lastMove;
+		this->tailMemory = this->tail;
+		if (commands.size() < 5)
+			++count;
 	}
 
 	string command = commands.back();
@@ -151,7 +230,7 @@ void Sneak::decide()
 list<string> Sneak::buildPath()
 
 {
-	drawSneak();
+	//drawSneak();
 
 	if (!(tail.empty()))
 	{
@@ -160,7 +239,7 @@ list<string> Sneak::buildPath()
 		putchar(' ');
 		
 	}
-	Sleep(10);
+	//Sleep(10);
 	string step;
 	coordin needCoord = myMap->apple->getCoord();
 	coordin lastPartTail;
@@ -185,287 +264,336 @@ list<string> Sneak::buildPath()
 	}
 
 
-	count2++;
-	if (count2 == 500)
+	//count2++;
+	//if (count2 == 500)
+	//{
+	//	throw SneakDecideEx(count2, count3);
+	//}
+	do
 	{
-		throw SneakDecideEx(count2, count3);
-	}
-do
-{
-	count3++;
+		//count3++;
 
 
-	if (needCoord.x == head.x)
-		if (needCoord.y > head.y)
-			needDirection = "down";		
-		else if (needCoord.y < head.y)
-			needDirection = "up";
+		if (needCoord.x == head.x)
+			if (needCoord.y > head.y)
+				needDirection = "down";
+			else if (needCoord.y < head.y)
+				needDirection = "up";
 
-	if (needCoord.y == head.y)
+		if (needCoord.y == head.y)
+			if (needCoord.x > head.x)
+				needDirection = "right";
+			else if (needCoord.x < head.x)
+				needDirection = "left";
+
 		if (needCoord.x > head.x)
-			needDirection = "right";
-		else if (needCoord.x < head.x)
-			needDirection = "left";
+			if (needCoord.y > head.y)
+				needDirection = "down-right";
+			else if (needCoord.y < head.y)
+				needDirection = "up-right";
 
-	if (needCoord.x > head.x)
 		if (needCoord.y > head.y)
-			needDirection = "down-right";
-		else if (needCoord.y < head.y)
-			needDirection = "up-right";
+			if (needCoord.x > head.x)
+				needDirection = "down-right";
+			else if (needCoord.x < head.x)
+				needDirection = "down-left";
 
-	if (needCoord.y > head.y)
-		if (needCoord.x > head.x)
-			needDirection = "down-right";
-		else if (needCoord.x < head.x)
-			needDirection = "down-left";
+		if (needCoord.x < head.x)
+			if (needCoord.y > head.y)
+				needDirection = "down-left";
+			else if (needCoord.y < head.y)
+				needDirection = "up-left";
 
-	if (needCoord.x < head.x)
-		if (needCoord.y > head.y)
-			needDirection = "down-left";
-		else if (needCoord.y < head.y)
-			needDirection = "up-left";
-
-	if (needCoord.y < head.y)
-		if (needCoord.x > head.x)
-			needDirection = "up-right";
-		else if (needCoord.x < head.x)
-			needDirection = "up-left";
+		if (needCoord.y < head.y)
+			if (needCoord.x > head.x)
+				needDirection = "up-right";
+			else if (needCoord.x < head.x)
+				needDirection = "up-left";
 
 
-	if (needDirection == "left")
-	{
-		if (lastMove != "right" && wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left")
+		if (needDirection == "left")
 		{
-			needDirection = "left";
-		}
-		else
-		{
-			if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
-				needDirection = "up";
-			else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
-				needDirection = "down";
-			else if (lastMove != "left" && wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right")
-				needDirection = "right";
-		}
-	}
-
-	if (needDirection == "right")
-	{
-		if (lastMove != "left" && wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right")
-		{
-			needDirection = "right";
-		}
-		else
-		{
-			if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
-				needDirection = "down";
-			else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
-				needDirection = "up";
-			else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+			if (lastMove != "right" && wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left")
+			{
 				needDirection = "left";
-		}
-	}
-
-	if (needDirection == "down")
-	{
-		if (lastMove != "up" && wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down")
-		{
-			needDirection = "down";
-		}
-		else
-		{
-			if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
-				needDirection = "left";
-			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
-				needDirection = "right";
-			else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
-				needDirection = "up";
-		}
-	}
-
-	if (needDirection == "up")
-	{
-		if (lastMove != "down" && wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up")
-		{
-			needDirection = "up";
-		}
-		else
-		{
-			if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
-				needDirection = "left";
-			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
-				needDirection = "right";
-			else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
-				needDirection = "down";
-		}
-	}
-
-
-
-	if (needDirection == "down-right")
-	{
-		if ((lastMove != "up" && lastMove != "left") && (wrongStep1 != "down" && wrongStep1 != "right") &&
-			(wrongStep2 != "down" && wrongStep2 != "right") && (wrongStep3 != "down" && wrongStep3 != "right"))
-		{
-			if (randomNumber(1, 2) == 1)
-				needDirection = "down";
+			}
 			else
-				needDirection = "right";
+			{
+				if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up" &&
+					wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+				{
+					if (randomNumber(1, 2) == 1)
+						needDirection = "down";
+					else
+						needDirection = "up";
+				}
+				else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+					needDirection = "up";
+				else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+					needDirection = "down";
+				else if (lastMove != "left" && wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right")
+					needDirection = "right";
+			}
 		}
-		else
-		{
-			if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up" )
-				needDirection = "down";
-			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
-				needDirection = "right";
-			else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
-				needDirection = "left";
-			else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
-				needDirection = "up";
-		}
-	}
 
-	if (needDirection == "down-left")
-	{
-		if ((lastMove != "up" && lastMove != "right") && (wrongStep1 != "down" && wrongStep1 != "left") &&
-			(wrongStep2 != "down" && wrongStep2 != "left") && (wrongStep3 != "down" && wrongStep3 != "left"))
+		if (needDirection == "right")
 		{
-			if (randomNumber(1, 2) == 1)
-				needDirection = "down";
+			if (lastMove != "left" && wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right")
+			{
+				needDirection = "right";
+			}
 			else
-				needDirection = "left";
+			{
+				if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up" &&
+					wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+				{
+					if (randomNumber(1, 2) == 1)
+						needDirection = "down";
+					else
+						needDirection = "up";
+				}
+				else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+					needDirection = "down";
+				else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+					needDirection = "up";
+				else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+					needDirection = "left";
+			}
 		}
-		else
-		{
-			if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
-				needDirection = "down";
-			else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
-				needDirection = "left";
-			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
-				needDirection = "right";
-			else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
-				needDirection = "up";
-		}
-	}
 
-	if (needDirection == "up-right")
-	{
-		if ((lastMove != "down" && lastMove != "left") && (wrongStep1 != "up" && wrongStep1 != "right") &&
-			(wrongStep2 != "up" && wrongStep2 != "right") && (wrongStep3 != "up" && wrongStep3 != "right"))
+		if (needDirection == "down")
 		{
-			if (randomNumber(1, 2) == 1)
-				needDirection = "up";
+			if (lastMove != "up" && wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down")
+			{
+				needDirection = "down";
+			}
 			else
-				needDirection = "right";
+			{
+				if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right" &&
+					wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+				{
+					if (randomNumber(1, 2) == 1)
+						needDirection = "right";
+					else
+						needDirection = "left";
+				}
+				else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+					needDirection = "left";
+				else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+					needDirection = "right";
+				else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+					needDirection = "up";
+			}
 		}
-		else
-		{
-			if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
-				needDirection = "up";
-			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
-				needDirection = "right";
-			else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
-				needDirection = "left";
-			else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
-				needDirection = "down";
-		}
-	}
 
-	if (needDirection == "up-left")
-	{
-		if ((lastMove != "down" && lastMove != "right") && (wrongStep1 != "up" && wrongStep1 != "left") &&
-			(wrongStep2 != "up" && wrongStep2 != "left") && (wrongStep3 != "up" && wrongStep3 != "left"))
+		if (needDirection == "up")
 		{
-			if (randomNumber(1, 2) == 1)
+			if (lastMove != "down" && wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up")
+			{
 				needDirection = "up";
+			}
 			else
-				needDirection = "left";
+			{
+				if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right" &&
+					wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+				{
+					if (randomNumber(1, 2) == 1)
+						needDirection = "right";
+					else
+						needDirection = "left";
+				}
+				else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+					needDirection = "left";
+				else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+					needDirection = "right";
+				else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+					needDirection = "down";
+			}
 		}
-		else
+
+
+
+		if (needDirection == "down-right")
 		{
-			if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
-				needDirection = "up";
-			else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
-				needDirection = "left";
-			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
-				needDirection = "right";
-			else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
-				needDirection = "down";
+			if ((lastMove != "up" && lastMove != "left") && (wrongStep1 != "down" && wrongStep1 != "right") &&
+				(wrongStep2 != "down" && wrongStep2 != "right") && (wrongStep3 != "down" && wrongStep3 != "right"))
+			{
+				if (randomNumber(1, 2) == 1)
+					needDirection = "down";
+				else
+					needDirection = "right";
+			}
+			else
+			{
+				if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+					needDirection = "down";
+				else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+					needDirection = "right";
+				else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right" &&
+					wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+				{
+					if (randomNumber(1, 2) == 1)
+						needDirection = "right";
+					else
+						needDirection = "up";
+				}
+				else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+					needDirection = "left";
+				else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+					needDirection = "up";
+			}
 		}
-	}
+
+		if (needDirection == "down-left")
+		{
+			if ((lastMove != "up" && lastMove != "right") && (wrongStep1 != "down" && wrongStep1 != "left") &&
+				(wrongStep2 != "down" && wrongStep2 != "left") && (wrongStep3 != "down" && wrongStep3 != "left"))
+			{
+				if (randomNumber(1, 2) == 1)
+					needDirection = "down";
+				else
+					needDirection = "left";
+			}
+			else
+			{
+				if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+					needDirection = "down";
+				else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+					needDirection = "left";
+				else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down" &&
+					wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+				{
+					if (randomNumber(1, 2) == 1)
+					needDirection = "right";
+					else
+					needDirection = "up";
+				}
+				else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+					needDirection = "right";
+				else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+					needDirection = "up";
+			}
+		}
+
+		if (needDirection == "up-right")
+		{
+			if ((lastMove != "down" && lastMove != "left") && (wrongStep1 != "up" && wrongStep1 != "right") &&
+				(wrongStep2 != "up" && wrongStep2 != "right") && (wrongStep3 != "up" && wrongStep3 != "right"))
+			{
+				if (randomNumber(1, 2) == 1)
+					needDirection = "up";
+				else
+					needDirection = "right";
+			}
+			else
+			{
+				if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+					needDirection = "up";
+				else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+					needDirection = "right";
+				else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right" &&
+					wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+				{
+					if (randomNumber(1, 2) == 1)
+						needDirection = "left";
+					else
+						needDirection = "down";
+				}
+				else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+					needDirection = "left";
+				else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+					needDirection = "down";
+			}
+		}
+
+		if (needDirection == "up-left")
+		{
+			if ((lastMove != "down" && lastMove != "right") && (wrongStep1 != "up" && wrongStep1 != "left") &&
+				(wrongStep2 != "up" && wrongStep2 != "left") && (wrongStep3 != "up" && wrongStep3 != "left"))
+			{
+				if (randomNumber(1, 2) == 1)
+					needDirection = "up";
+				else
+					needDirection = "left";
+			}
+			else
+			{
+				if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+					needDirection = "up";
+				else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+					needDirection = "left";
+				else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left" &&
+					wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+				{
+					if (randomNumber(1, 2) == 1)
+						needDirection = "down";
+					else
+						needDirection = "right";
+				}
+				else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+					needDirection = "right";
+				else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+					needDirection = "down";
+			}
+		}
 
 
 
 
-	if (needDirection == "down")
-	{
-		step = "down";
-		dy = 1; dx = 0;
-	}
-	if (needDirection == "up")
-	{
-		step = "up";
-		dy = -1; dx = 0;
-	}
+		if (needDirection == "down")
+		{
+			step = "down";
+			dy = 1; dx = 0;
+		}
+		if (needDirection == "up")
+		{
+			step = "up";
+			dy = -1; dx = 0;
+		}
 
-	if (needDirection == "right")
-	{
-		step = "right";
-		dy = 0; dx = 1;
-	}
-	if (needDirection == "left")
-	{
-		step = "left";
-		dy = 0; dx = -1;
-	}
+		if (needDirection == "right")
+		{
+			step = "right";
+			dy = 0; dx = 1;
+		}
+		if (needDirection == "left")
+		{
+			step = "left";
+			dy = 0; dx = -1;
+		}
 
-
-
-
-	string t;
-
-	head.x += dx;
-	head.y += dy;
-	if (!(isPathRight()) || !(thisPlaceFreeMe(head)))
-	{
-		if (wrongStep1.empty())
-			wrongStep1 = needDirection;
-		else if (wrongStep2.empty())
-			wrongStep2 = needDirection;
-		else if (wrongStep3.empty())
-			wrongStep3 = needDirection;
+		string t;
+		//drawSneak();
+		head.x += dx;
+		head.y += dy;
+		if (!(thisPlaceFreeMe(head)) || (needDirection != "down" && needDirection != "up" && needDirection != "right" && needDirection != "left"))
+		{
+			if (wrongStep1.empty())
+				wrongStep1 = needDirection;
+			else if (wrongStep2.empty())
+				wrongStep2 = needDirection;
+			else if (wrongStep3.empty())
+				wrongStep3 = needDirection;
+			else
+			{
+				head.x -= dx;
+				head.y -= dy;
+				//eraseSneak();
+				return tempList;
+			}
+		}
 		else
 		{
 			head.x -= dx;
 			head.y -= dy;
-			return tempList;
-		}
-	}
-	else
-	{
-		if (!(tail.empty()))
-		{
-			tail.push_front(head);
-			tail.pop_back();
-		}
-
-		if (needCoord == head)
-		{
-			lastMove = needDirection;
-			commands.push_back(step);
-			return commands;
-		}
-		else
-		{
-			t = lastMove;
-			lastMove = needDirection;
-			tempList = buildPath();
-			if (!(tempList.empty()))
+			if (!(tail.empty()))
 			{
-				commands.push_back(step);
-				return commands;
+				tail.push_front(head);
+				tail.pop_back();
 			}
-			else
+			head.x += dx;
+			head.y += dy;
+			if (!(isPathRight()))
 			{
 				if (wrongStep1.empty())
 					wrongStep1 = needDirection;
@@ -475,7 +603,6 @@ do
 					wrongStep3 = needDirection;
 				else
 				{
-					lastMove = t;
 					head.x -= dx;
 					head.y -= dy;
 					if (!(tail.empty()))
@@ -483,30 +610,125 @@ do
 						tail.push_back(lastPartTail);
 						tail.pop_front();
 					}
+						//eraseSneak();
 					return tempList;
 				}
 			}
-			lastMove = t;
-		}
-		if (!(tail.empty()))
-		{
-			tail.push_back(lastPartTail);
-			tail.pop_front();
-		}
-	}
+			else if (needCoord == head)
+			{
+				lastMove = needDirection;
+				commands.push_back(step);
+				return commands;
+			}
+			else
+			{
+				t = lastMove;
+				lastMove = needDirection;
+				tempList = buildPath();
+				
+				if (!(tempList.empty()))
+				{
+					commands.push_back(step);
+					return commands;
+				}
+				else
+				{
+					if (wrongStep1.empty())
+						wrongStep1 = needDirection;
+					else if (wrongStep2.empty())
+						wrongStep2 = needDirection;
+					else if (wrongStep3.empty())
+						wrongStep3 = needDirection;
+					else
+					{
+						if (needDirection == "down")
+						{
+							step = "down";
+							dy = 1; dx = 0;
+						}
+						if (needDirection == "up")
+						{
+							step = "up";
+							dy = -1; dx = 0;
+						}
 
-	head.x -= dx;
-	head.y -= dy;
+						if (needDirection == "right")
+						{
+							step = "right";
+							dy = 0; dx = 1;
+						}
+						if (needDirection == "left")
+						{
+							step = "left";
+							dy = 0; dx = -1;
+						}
+						lastMove = t;
+						head.x -= dx;
+						head.y -= dy;
+						if (!(tail.empty()))
+						{
+							tail.push_back(lastPartTail);
+							tail.pop_front();
+						}
+						//eraseSneak();
+						return tempList;
+					}
+				}
+				lastMove = t;
+			}
+			if (!(tail.empty()))
+			{
+				tail.push_back(lastPartTail);
+				tail.pop_front();
+			}
+		}
+
+		if (needDirection == "down")
+		{
+			step = "down";
+			dy = 1; dx = 0;
+		}
+		if (needDirection == "up")
+		{
+			step = "up";
+			dy = -1; dx = 0;
+		}
+
+		if (needDirection == "right")
+		{
+			step = "right";
+			dy = 0; dx = 1;
+		}
+		if (needDirection == "left")
+		{
+			step = "left";
+			dy = 0; dx = -1;
+		}
+		head.x -= dx;
+		head.y -= dy;
+
+		//for (auto part : tail)
+		//{
+		//	if (part == head)
+		//	{
+		//		cout << "a";
+		//	}
+		//}
+
+	}while (true);
+}
+	
+void Sneak::eraseSneak()
+{
 	for (auto part : tail)
 	{
-		if (part == head)
-		{
-			cout << "a";
-		}
+		SetConsoleCursorPosition(h, part.coordinToCOORD());
+		SetConsoleTextAttribute(h, color);
+		putchar(' ');
 	}
-
-}while (true);
-	
+	SetConsoleCursorPosition(h, head.coordinToCOORD());
+	SetConsoleTextAttribute(h, color);
+	putchar(' ');
 }
 
 bool Sneak::isPathRight()
@@ -552,7 +774,7 @@ bool Sneak::thisPlaceFreeMe(coordin coord)
 	}
 
 	if (myMap->leftUpCorrner.x == coord.x || myMap->leftUpCorrner.y == coord.y ||
-		(myMap->leftUpCorrner.x + myMap->width) == coord.x || (myMap->leftUpCorrner.y + myMap->height) == coord.y)
+		(myMap->leftUpCorrner.x + myMap->width - 1 ) == coord.x || (myMap->leftUpCorrner.y + myMap->height - 1) == coord.y)
 		return false;
 	return true;
 }

@@ -36,7 +36,6 @@ int main()
 	Sneak sneak1(map);
 	map.pushSneak(sneak1);
 
-
 	
 	do
 	{
@@ -52,7 +51,18 @@ int main()
 		//{
 		//	sneak1.decide();
 		//}
-
+		sneak1.drawSneak();
+		if (_kbhit() && chooseMode == 'm')
+		{
+			int k = _getch();
+			if (k == 0 || k == 224)
+				k = _getch();
+			sneak1.usersDecide(k);
+		}
+		else if (chooseMode == 'a')
+		{
+			sneak1.decide();
+		}
 
 
 		coordin nextStep = sneak1.getHead() ;
@@ -79,25 +89,14 @@ int main()
 			map.gameContinue = 0;
 		}
 
-		Sleep(15);
-		if (_kbhit() && chooseMode == 'm')
-		{
-			int k = _getch();
-			if (k == 0 || k == 224)
-				k = _getch();
-			sneak1.usersDecide(k);
-		}
-		else if (chooseMode == 'a')
-		{
-			sneak1.decide();
-		}
+		Sleep(10);
 
 
 
 
 	} while (map.gameContinue);
 
-	coordin ccc = map.getLeftUpCorrner();
+coordin ccc = map.getLeftUpCorrner();
 	ccc.x += (map.getWidth() / 2);
 	ccc.y += (map.getHeight() + 3 );
 
@@ -108,6 +107,11 @@ int main()
 	coordin cc = map.getLeftUpCorrner();
 	cc.x += (map.getWidth() / 2);
 	cc.y -= 2;
+
+	Sneak s(sneak1);
+	s.tailMemory = sneak1.tailMemory;
+	s.color = 4;
+	s.drawSneak();
 
 	SetConsoleTextAttribute(h, 4);
 	while (true)

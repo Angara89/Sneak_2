@@ -57,8 +57,8 @@ void MyMap::putApple()
 	coordin c = leftUpCorrner;
 	do
 	{
-		apple->coord.x = randomNumber(c.x + 1 ,c.x + width - 2);
-		apple->coord.y = randomNumber(c.y + 1, c.y + height - 2);
+		apple->coord.x = randomNumber(c.x + 2 ,c.x + width - 2);
+		apple->coord.y = randomNumber(c.y + 2, c.y + height - 2);
 	} while (!(thisPlaceFree(apple->coord)));
 
 	apple->drawApple();
