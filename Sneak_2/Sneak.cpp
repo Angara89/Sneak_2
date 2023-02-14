@@ -34,9 +34,6 @@ Sneak::Sneak(Sneak& sneak)
 
 void Sneak::drawSneak()
 {
-	SetConsoleCursorPosition(h, head.coordinToCOORD());
-	SetConsoleTextAttribute(h, color);
-	putchar(simbolHead);
 
 	for (auto part : tail)
 	{
@@ -44,6 +41,9 @@ void Sneak::drawSneak()
 		SetConsoleTextAttribute(h, color);
 		putchar(simbolTail);
 	}
+	SetConsoleCursorPosition(h, head.coordinToCOORD());
+	SetConsoleTextAttribute(h, color);
+	putchar(simbolHead);
 }
 
 void Sneak::moveSneak(bool eatApple)
@@ -99,9 +99,22 @@ void Sneak::decide()
 
 
 		Sneak sneak(*this);
-		commands = sneak.buildPath();
+		sneak.color = 8;
+		try 
+		{
+			commands = sneak.buildPath();
+		}
+		catch (SneakDecideEx ex)
+		{
+			COORD c; c.X = 1; c.Y = 1;
+			SetConsoleCursorPosition(h, c);
+			SetConsoleTextAttribute(h, 7);
+			putchar(' ');
+			cout << "Iter: " << ex.iter1 << " iter2: " << ex.iter2;
+		}
 		this->lastMove = sneak.lastMove;
 	}
+
 	string command = commands.back();
 	commands.pop_back();
 
@@ -138,7 +151,16 @@ void Sneak::decide()
 list<string> Sneak::buildPath()
 
 {
+	drawSneak();
 
+	if (!(tail.empty()))
+	{
+		SetConsoleCursorPosition(h, tail.back().coordinToCOORD());
+		SetConsoleTextAttribute(h, 1);
+		putchar(' ');
+		
+	}
+	Sleep(10);
 	string step;
 	coordin needCoord = myMap->apple->getCoord();
 	coordin lastPartTail;
@@ -157,12 +179,22 @@ list<string> Sneak::buildPath()
 
 	string needDirection;
 	count1++;
-	if (count1 == 40)
+	if (count1 ==300)
 	{
 		count1 = 0;
 	}
+
+
+	count2++;
+	if (count2 == 500)
+	{
+		throw SneakDecideEx(count2, count3);
+	}
 do
 {
+	count3++;
+
+
 	if (needCoord.x == head.x)
 		if (needCoord.y > head.y)
 			needDirection = "down";		
@@ -199,6 +231,77 @@ do
 		else if (needCoord.x < head.x)
 			needDirection = "up-left";
 
+
+	if (needDirection == "left")
+	{
+		if (lastMove != "right" && wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left")
+		{
+			needDirection = "left";
+		}
+		else
+		{
+			if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+				needDirection = "up";
+			else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+				needDirection = "down";
+			else if (lastMove != "left" && wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right")
+				needDirection = "right";
+		}
+	}
+
+	if (needDirection == "right")
+	{
+		if (lastMove != "left" && wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right")
+		{
+			needDirection = "right";
+		}
+		else
+		{
+			if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+				needDirection = "down";
+			else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+				needDirection = "up";
+			else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+				needDirection = "left";
+		}
+	}
+
+	if (needDirection == "down")
+	{
+		if (lastMove != "up" && wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down")
+		{
+			needDirection = "down";
+		}
+		else
+		{
+			if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+				needDirection = "left";
+			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+				needDirection = "right";
+			else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+				needDirection = "up";
+		}
+	}
+
+	if (needDirection == "up")
+	{
+		if (lastMove != "down" && wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up")
+		{
+			needDirection = "up";
+		}
+		else
+		{
+			if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+				needDirection = "left";
+			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+				needDirection = "right";
+			else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+				needDirection = "down";
+		}
+	}
+
+
+
 	if (needDirection == "down-right")
 	{
 		if ((lastMove != "up" && lastMove != "left") && (wrongStep1 != "down" && wrongStep1 != "right") &&
@@ -217,7 +320,7 @@ do
 				needDirection = "right";
 			else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
 				needDirection = "left";
-			else
+			else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
 				needDirection = "up";
 		}
 	}
@@ -240,7 +343,7 @@ do
 				needDirection = "left";
 			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
 				needDirection = "right";
-			else
+			else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
 				needDirection = "up";
 		}
 	}
@@ -263,7 +366,7 @@ do
 				needDirection = "right";
 			else if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
 				needDirection = "left";
-			else
+			else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
 				needDirection = "down";
 		}
 	}
@@ -286,80 +389,11 @@ do
 				needDirection = "left";
 			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
 				needDirection = "right";
-			else
-				needDirection = "down";
-		}
-	}
-
-
-
-	if (needDirection == "left")
-	{
-		if (lastMove != "right" && wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left")
-		{
-			needDirection = "left";
-		}
-		else
-		{
-			if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
-				needDirection = "up";
 			else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
 				needDirection = "down";
-			else
-				needDirection = "right";
 		}
 	}
 
-	if (needDirection == "right")
-	{
-		if (lastMove != "left" && wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right")
-		{
-			needDirection = "right";
-		}
-		else
-		{
-			if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
-				needDirection = "down";
-			else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
-				needDirection = "up";
-			else
-				needDirection = "left";
-		}
-	}
-
-	if (needDirection == "down")
-	{
-		if (lastMove != "up" && wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down")
-		{
-			needDirection = "down";
-		}
-		else
-		{
-			if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
-				needDirection = "left";
-			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
-				needDirection = "right";
-			else
-				needDirection = "up";
-		}
-	}
-
-	if (needDirection == "up")
-	{
-		if (lastMove != "down" && wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up")
-		{
-			needDirection = "up";
-		}
-		else
-		{
-			if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
-				needDirection = "left";
-			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
-				needDirection = "right";
-			else
-				needDirection = "down";
-		}
-	}
 
 
 
@@ -386,16 +420,13 @@ do
 	}
 
 
-	if (!(tail.empty()))
-	{
-		tail.push_front(head);
-		tail.pop_back();
-	}
-	head.x += dx;
-	head.y += dy;
+
 
 	string t;
-	if (!(myMap->thisPlaceFree(head)))
+
+	head.x += dx;
+	head.y += dy;
+	if (!(isPathRight()) || !(thisPlaceFreeMe(head)))
 	{
 		if (wrongStep1.empty())
 			wrongStep1 = needDirection;
@@ -407,80 +438,70 @@ do
 		{
 			head.x -= dx;
 			head.y -= dy;
-			if (!(tail.empty()))
-			{
-				tail.push_back(lastPartTail);
-				tail.pop_front();
-			}
 			return tempList;
 		}
-	}
-	else if (!(isPathRight()))
-	{
-		if (wrongStep1.empty())
-			wrongStep1 = needDirection;
-		else if (wrongStep2.empty())
-			wrongStep2 = needDirection;
-		else if (wrongStep3.empty())
-			wrongStep3 = needDirection;
-		else
-		{
-			head.x -= dx;
-			head.y -= dy;
-			if (!(tail.empty()))
-			{
-				tail.push_back(lastPartTail);
-				tail.pop_front();
-			}
-			return tempList;
-		}
-	}
-	else if (needCoord == head)
-	{
-		lastMove = needDirection;
-		commands.push_back(step);
-		return commands;
 	}
 	else
 	{
-		t = lastMove;
-		lastMove = needDirection;
-		tempList = buildPath();
-		if (!(tempList.empty()))
+		if (!(tail.empty()))
 		{
+			tail.push_front(head);
+			tail.pop_back();
+		}
+		if (needCoord == head)
+		{
+			lastMove = needDirection;
 			commands.push_back(step);
 			return commands;
 		}
 		else
 		{
-			if (wrongStep1.empty())
-				wrongStep1 = needDirection;
-			else if (wrongStep2.empty())
-				wrongStep2 = needDirection;
-			else if (wrongStep3.empty())
-				wrongStep3 = needDirection;
+			t = lastMove;
+			lastMove = needDirection;
+			tempList = buildPath();
+			if (!(tempList.empty()))
+			{
+				commands.push_back(step);
+				return commands;
+			}
 			else
 			{
-				lastMove = t;
-				head.x -= dx;
-				head.y -= dy;
-				if (!(tail.empty()))
+				if (wrongStep1.empty())
+					wrongStep1 = needDirection;
+				else if (wrongStep2.empty())
+					wrongStep2 = needDirection;
+				else if (wrongStep3.empty())
+					wrongStep3 = needDirection;
+				else
 				{
-					tail.push_back(lastPartTail);
-					tail.pop_front();
+					lastMove = t;
+					head.x -= dx;
+					head.y -= dy;
+					if (!(tail.empty()))
+					{
+						tail.push_back(lastPartTail);
+						tail.pop_front();
+					}
+					return tempList;
 				}
-				return tempList;
 			}
+			lastMove = t;
 		}
-
+		if (!(tail.empty()))
+		{
+			tail.push_back(lastPartTail);
+			tail.pop_front();
+		}
 	}
-	lastMove = t;
+
 	head.x -= dx;
 	head.y -= dy;
-	if (!(tail.empty()))
+	for (auto part : tail)
 	{
-		tail.push_back(lastPartTail);
-		tail.pop_front();
+		if (part == head)
+		{
+			cout << "a";
+		}
 	}
 
 }while (true);
@@ -492,19 +513,19 @@ bool Sneak::isPathRight()
 	int result = 0;
 	coordin c = head;
 	c.x += 1;
-	result += myMap->thisPlaceFree(c);
+	result += thisPlaceFreeMe(c);
 	
 	c = head;
 	c.x -= 1;
-	result += myMap->thisPlaceFree(c);
+	result += thisPlaceFreeMe(c);
 
 	c = head;
 	c.y += 1;
-	result += myMap->thisPlaceFree(c);
+	result += thisPlaceFreeMe(c);
 
 	c = head;
 	c.y -= 1;
-	result += myMap->thisPlaceFree(c);
+	result += thisPlaceFreeMe(c);
 
 	if (result != 0)
 	{
@@ -517,6 +538,23 @@ bool Sneak::isPathRight()
 }
 
 
+bool Sneak::thisPlaceFreeMe(coordin coord)
+{
+
+
+	for (auto part : tail)
+	{
+		if (part == coord)
+		{
+			return false;
+		}
+	}
+
+	if (myMap->leftUpCorrner.x == coord.x || myMap->leftUpCorrner.y == coord.y ||
+		(myMap->leftUpCorrner.x + myMap->width) == coord.x || (myMap->leftUpCorrner.y + myMap->height) == coord.y)
+		return false;
+	return true;
+}
 
 
 
