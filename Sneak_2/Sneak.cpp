@@ -87,14 +87,14 @@ void Sneak::usersDecide(int k)
 
 void Sneak::decide()
 {
-	if (commands.empty())
+	while (commands.empty())
 	{
 		Sneak sneak(*this);
 		commands = sneak.buildPath();
 		this->lastMove = sneak.lastMove;
 	}
-	string command = commands.front();
-	commands.pop_front();
+	string command = commands.back();
+	commands.pop_back();
 
 	if (command == "down")
 	{
@@ -316,7 +316,7 @@ do
 			wrongStep1 = needDirection;
 		else if (wrongStep2.empty())
 			wrongStep2 = needDirection;
-		else if (wrongStep1.empty())
+		else if (wrongStep3.empty())
 			wrongStep3 = needDirection;
 		else
 			return tempList;
@@ -333,7 +333,7 @@ do
 			wrongStep1 = needDirection;
 		else if (wrongStep2.empty())
 			wrongStep2 = needDirection;
-		else if (wrongStep1.empty())
+		else if (wrongStep3.empty())
 			wrongStep3 = needDirection;
 		else
 			return tempList;
@@ -354,7 +354,7 @@ do
 				wrongStep1 = needDirection;
 			else if (wrongStep2.empty())
 				wrongStep2 = needDirection;
-			else if (wrongStep1.empty())
+			else if (wrongStep3.empty())
 				wrongStep3 = needDirection;
 			else
 				return tempList;
