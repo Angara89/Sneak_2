@@ -83,6 +83,9 @@ bool MyMap::thisPlaceFree(coordin coord)
 			}
 		}
 	}
+	if (leftUpCorrner.x == coord.x || leftUpCorrner.y == coord.y ||
+		(leftUpCorrner.x + width) == coord.x || (leftUpCorrner.y + height) == coord.y)
+		return false;
 	return true;
 }
 

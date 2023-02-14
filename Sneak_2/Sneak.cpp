@@ -87,8 +87,17 @@ void Sneak::usersDecide(int k)
 
 void Sneak::decide()
 {
+	this->count1 = 0;
+	int count = 0;
 	while (commands.empty())
 	{
+		++count;
+		if (count == 5)
+		{
+			count = 0;
+		}
+
+
 		Sneak sneak(*this);
 		commands = sneak.buildPath();
 		this->lastMove = sneak.lastMove;
@@ -127,6 +136,7 @@ void Sneak::decide()
 }
 
 list<string> Sneak::buildPath()
+
 {
 
 	string step;
@@ -146,6 +156,11 @@ list<string> Sneak::buildPath()
 
 
 	string needDirection;
+	count1++;
+	if (count1 == 40)
+	{
+		count1 = 0;
+	}
 do
 {
 	if (needCoord.x == head.x)
@@ -278,6 +293,76 @@ do
 
 
 
+	if (needDirection == "left")
+	{
+		if (lastMove != "right" && wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left")
+		{
+			needDirection = "left";
+		}
+		else
+		{
+			if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+				needDirection = "up";
+			else if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+				needDirection = "down";
+			else
+				needDirection = "right";
+		}
+	}
+
+	if (needDirection == "right")
+	{
+		if (lastMove != "left" && wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right")
+		{
+			needDirection = "right";
+		}
+		else
+		{
+			if (wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down" && lastMove != "up")
+				needDirection = "down";
+			else if (wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up" && lastMove != "down")
+				needDirection = "up";
+			else
+				needDirection = "left";
+		}
+	}
+
+	if (needDirection == "down")
+	{
+		if (lastMove != "up" && wrongStep1 != "down" && wrongStep2 != "down" && wrongStep3 != "down")
+		{
+			needDirection = "down";
+		}
+		else
+		{
+			if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+				needDirection = "left";
+			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+				needDirection = "right";
+			else
+				needDirection = "up";
+		}
+	}
+
+	if (needDirection == "up")
+	{
+		if (lastMove != "down" && wrongStep1 != "up" && wrongStep2 != "up" && wrongStep3 != "up")
+		{
+			needDirection = "up";
+		}
+		else
+		{
+			if (wrongStep1 != "left" && wrongStep2 != "left" && wrongStep3 != "left" && lastMove != "right")
+				needDirection = "left";
+			else if (wrongStep1 != "right" && wrongStep2 != "right" && wrongStep3 != "right" && lastMove != "left")
+				needDirection = "right";
+			else
+				needDirection = "down";
+		}
+	}
+
+
+
 	if (needDirection == "down")
 	{
 		step = "down";
@@ -300,8 +385,7 @@ do
 		dy = 0; dx = -1;
 	}
 
-	//tempC.x += dx;
-	//tempC.y += dy;
+
 	if (!(tail.empty()))
 	{
 		tail.push_front(head);
@@ -310,6 +394,7 @@ do
 	head.x += dx;
 	head.y += dy;
 
+	string t;
 	if (!(myMap->thisPlaceFree(head)))
 	{
 		if (wrongStep1.empty())
@@ -319,13 +404,16 @@ do
 		else if (wrongStep3.empty())
 			wrongStep3 = needDirection;
 		else
+		{
+			head.x -= dx;
+			head.y -= dy;
+			if (!(tail.empty()))
+			{
+				tail.push_back(lastPartTail);
+				tail.pop_front();
+			}
 			return tempList;
-	}
-	else if (needCoord == head)
-	{
-		lastMove = needDirection;
-		commands.push_back(step);
-		return commands;
+		}
 	}
 	else if (!(isPathRight()))
 	{
@@ -336,11 +424,26 @@ do
 		else if (wrongStep3.empty())
 			wrongStep3 = needDirection;
 		else
+		{
+			head.x -= dx;
+			head.y -= dy;
+			if (!(tail.empty()))
+			{
+				tail.push_back(lastPartTail);
+				tail.pop_front();
+			}
 			return tempList;
+		}
+	}
+	else if (needCoord == head)
+	{
+		lastMove = needDirection;
+		commands.push_back(step);
+		return commands;
 	}
 	else
 	{
-		string t = lastMove;
+		t = lastMove;
 		lastMove = needDirection;
 		tempList = buildPath();
 		if (!(tempList.empty()))
@@ -357,11 +460,21 @@ do
 			else if (wrongStep3.empty())
 				wrongStep3 = needDirection;
 			else
+			{
+				lastMove = t;
+				head.x -= dx;
+				head.y -= dy;
+				if (!(tail.empty()))
+				{
+					tail.push_back(lastPartTail);
+					tail.pop_front();
+				}
 				return tempList;
-			lastMove = t;
+			}
 		}
 
 	}
+	lastMove = t;
 	head.x -= dx;
 	head.y -= dy;
 	if (!(tail.empty()))

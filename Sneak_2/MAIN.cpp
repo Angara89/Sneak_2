@@ -79,7 +79,7 @@ int main()
 			map.gameContinue = 0;
 		}
 
-		Sleep(100);
+		Sleep(30);
 		if (_kbhit() && chooseMode == 'm')
 		{
 			int k = _getch();

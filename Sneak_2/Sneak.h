@@ -24,7 +24,7 @@ public:
 	string lastMoveText;
 	void drawSneak();
 	MyMap* myMap;
-
+	int count1;
 	Sneak(MyMap& map);
 	Sneak(Sneak& sneak);
 
