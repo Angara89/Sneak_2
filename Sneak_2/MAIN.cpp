@@ -5,6 +5,7 @@
 
 
 
+
 int width = 30, height = 15;
 
 void setObject(const HANDLE& h, const COORD& coord, const char& simbol, const int& color = 10)
@@ -24,13 +25,30 @@ int randomNumber(int first, int last)
 
 int main()
 {
-	char chooseMode = 'a';
+
+
+
 	system("cls");
 	srand(time(0)); // запуск генератора случайных чисел
 	system("mode con cols=100 lines=60"); // установка размеров окна консоли
 	MoveWindow(GetConsoleWindow(), -1000, 50, 1000, 600, true); // установка стартовой позиции окна консоли
 	CONSOLE_CURSOR_INFO cci = { sizeof(cci), false }; // создание параметров на отображение курсора
 	SetConsoleCursorInfo(h, &cci); //связывание параметров и хендла
+
+
+	cout << endl << "   $neak!" << endl << endl << "input 'A' if you want to run the snake in automatic mode " << endl
+		 << "input 'M' if you want to run the snake in manually mode ";
+	char chooseMode;
+	while (!(_kbhit()))
+	{
+		char k = _getch();
+		if (k == 'm' || k == 'M' || k == 'a' || k == 'A' )
+		{
+			chooseMode = k;
+			break;
+		}
+	}
+	system("cls");
 	coordin c(10, 5);
 	MyMap map(15, 30, 7, c);
 	Sneak sneak1(map);

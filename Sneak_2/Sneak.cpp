@@ -10,74 +10,74 @@ Sneak::Sneak(MyMap& map)
 
 
 
-	c.x += 0;
-	c.y += 1;
-	tail.push_back(c);
+	//c.x += 0;
+	//c.y += 1;
+	//tail.push_back(c);
 
-	c.x += 0;
-	c.y += 1;
-	tail.push_back(c);
+	//c.x += 0;
+	//c.y += 1;
+	//tail.push_back(c);
 
 
-	c.x += 0;
-	c.y += 1;
-	tail.push_back(c);
+	//c.x += 0;
+	//c.y += 1;
+	//tail.push_back(c);
 
-	c.x += 0;
-	c.y += 1;
-	tail.push_back(c);
+	//c.x += 0;
+	//c.y += 1;
+	//tail.push_back(c);
 
-	c.x += 1;
-	c.y += 0;
-	tail.push_back(c);
+	//c.x += 1;
+	//c.y += 0;
+	//tail.push_back(c);
 
-	c.x += 1;
-	c.y += 0;
-	tail.push_back(c);
+	//c.x += 1;
+	//c.y += 0;
+	//tail.push_back(c);
 
-	c.x += 0;
-	c.y += -1;
-	tail.push_back(c);
+	//c.x += 0;
+	//c.y += -1;
+	//tail.push_back(c);
 
-	c.x += 0;
-	c.y += -1;
-	tail.push_back(c);
+	//c.x += 0;
+	//c.y += -1;
+	//tail.push_back(c);
 
-	c.x += 0;
-	c.y += -1;
-	tail.push_back(c);
+	//c.x += 0;
+	//c.y += -1;
+	//tail.push_back(c);
 
-	c.x += 0;
-	c.y += -1;
-	tail.push_back(c);
+	//c.x += 0;
+	//c.y += -1;
+	//tail.push_back(c);
 
-	c.x += 0;
-	c.y += -1;
-	tail.push_back(c);
+	//c.x += 0;
+	//c.y += -1;
+	//tail.push_back(c);
 
-	c.x += -1;
-	c.y += 0;
-	tail.push_back(c);
+	//c.x += -1;
+	//c.y += 0;
+	//tail.push_back(c);
 
-	c.x += -1;
-	c.y += 0;
-	tail.push_back(c);
+	//c.x += -1;
+	//c.y += 0;
+	//tail.push_back(c);
 
-	c.x += -1;
-	c.y += 0;
-	tail.push_back(c);
+	//c.x += -1;
+	//c.y += 0;
+	//tail.push_back(c);
 
-	c.x += -1;
-	c.y += 0;
-	tail.push_back(c);
+	//c.x += -1;
+	//c.y += 0;
+	//tail.push_back(c);
 
-	c.x += -1;
-	c.y += 0;
-	tail.push_back(c);
+	//c.x += -1;
+	//c.y += 0;
+	//tail.push_back(c);
 
-	c.x += -1;
-	c.y += 0;
-	tail.push_back(c);
+	//c.x += -1;
+	//c.y += 0;
+	//tail.push_back(c);
 
 
 
@@ -161,6 +161,8 @@ void Sneak::usersDecide(int k)
 	}
 }
 
+
+
 void Sneak::decide()
 {
 	this->count1 = 0;
@@ -243,6 +245,7 @@ list<string> Sneak::buildPath()
 	string step;
 	coordin needCoord = myMap->apple->getCoord();
 	coordin lastPartTail;
+
 	if (!(tail.empty()))
 	{
 		lastPartTail = tail.back();
@@ -718,6 +721,8 @@ list<string> Sneak::buildPath()
 	}while (true);
 }
 	
+
+
 void Sneak::eraseSneak()
 {
 	for (auto part : tail)
@@ -759,7 +764,6 @@ bool Sneak::isPathRight()
 		return 0;
 	}
 }
-
 
 bool Sneak::thisPlaceFreeMe(coordin coord)
 {
