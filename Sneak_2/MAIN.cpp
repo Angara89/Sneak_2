@@ -37,7 +37,7 @@ int main()
 
 
 	cout << endl << "   $neak!" << endl << endl << "input 'A' if you want to run the snake in automatic mode " << endl
-		 << "input 'M' if you want to run the snake in manually mode ";
+												<< "input 'M' if you want to run the snake in manually mode ";
 	char chooseMode;
 	while (!(_kbhit()))
 	{
@@ -70,6 +70,16 @@ int main()
 		//	sneak1.decide();
 		//}
 		sneak1.drawSneak();
+
+		if ( chooseMode == 'm')
+		{
+			Sleep(100);
+		}
+		else if (chooseMode == 'a')
+		{
+			Sleep(10);			
+		}
+
 		if (_kbhit() && chooseMode == 'm')
 		{
 			int k = _getch();
@@ -79,6 +89,7 @@ int main()
 		}
 		else if (chooseMode == 'a')
 		{
+			Sleep(10);
 			sneak1.decide();
 		}
 
@@ -107,7 +118,6 @@ int main()
 			map.gameContinue = 0;
 		}
 
-		Sleep(10);
 
 
 
