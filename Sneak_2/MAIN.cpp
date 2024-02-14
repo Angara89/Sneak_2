@@ -3,9 +3,6 @@
 #include "Sneak.h"
 #include "MyMap.h"
 
-
-
-
 int width = 30, height = 15;
 
 void setObject(const HANDLE& h, const COORD& coord, const char& simbol, const int& color = 10)
@@ -25,25 +22,19 @@ int randomNumber(int first, int last)
 
 int main()
 {
-
-
-
 	system("cls");
 	srand(time(0)); // запуск генератора случайных чисел
-	system("mode con cols=100 lines=60"); // установка размеров окна консоли
-	MoveWindow(GetConsoleWindow(), -1000, 50, 1000, 600, true); // установка стартовой позиции окна консоли
+	system("mode con cols=200 lines=120"); // установка размеров окна консоли
+	MoveWindow(GetConsoleWindow(), 100, 100, 500, 500, true); // установка стартовой позиции окна консоли
 	CONSOLE_CURSOR_INFO cci = { sizeof(cci), false }; // создание параметров на отображение курсора
 	SetConsoleCursorInfo(h, &cci); //связывание параметров и хендла
-
 
 	cout << endl << "   $neak!" << endl << endl << "input 'A' if you want to run the snake in automatic mode " << endl
 												<< "input 'M' if you want to run the snake in manually mode ";
 	char chooseMode;
-	while (!(_kbhit()))
-	{
+	while (!(_kbhit())) {
 		char k = _getch();
-		if (k == 'm' || k == 'M' || k == 'a' || k == 'A' )
-		{
+		if (k == 'm' || k == 'M' || k == 'a' || k == 'A' ) {
 			chooseMode = k;
 			break;
 		}
@@ -55,8 +46,7 @@ int main()
 	map.pushSneak(sneak1);
 
 	
-	do
-	{
+	do {
 		//Sleep(100);
 		//if (_kbhit() && chooseMode == 'm')
 		//{
@@ -70,25 +60,19 @@ int main()
 		//	sneak1.decide();
 		//}
 		sneak1.drawSneak();
-
-		if ( chooseMode == 'm')
-		{
+		if (chooseMode == 'm') {
 			Sleep(100);
 		}
-		else if (chooseMode == 'a')
-		{
+		else if (chooseMode == 'a') {
 			Sleep(10);			
 		}
-
-		if (_kbhit() && chooseMode == 'm')
-		{
+		if (_kbhit() && chooseMode == 'm') {
 			int k = _getch();
 			if (k == 0 || k == 224)
 				k = _getch();
 			sneak1.usersDecide(k);
 		}
-		else if (chooseMode == 'a')
-		{
+		else if (chooseMode == 'a') {
 			Sleep(10);
 			sneak1.decide();
 		}
@@ -99,38 +83,29 @@ int main()
 		nextStep.y += sneak1.getDY();
 
 		if (nextStep.x > map.getLeftUpCorrner().x + map.getWidth() - 1 || nextStep.x < map.getLeftUpCorrner().x + 1 ||
-			nextStep.y > map.getLeftUpCorrner().y + map.getHeight() - 1|| nextStep.y < map.getLeftUpCorrner().y + 1)
-		{
+			nextStep.y > map.getLeftUpCorrner().y + map.getHeight() - 1|| nextStep.y < map.getLeftUpCorrner().y + 1) {
 			map.gameContinue = 0;
 		}
 
-		if (nextStep == map.apple->getCoord())
-		{
+		if (nextStep == map.apple->getCoord()) {
 			sneak1.moveSneak(true);
 			map.putApple();
 		}
-		else if (map.thisPlaceFree(nextStep))
-		{
+		else if (map.thisPlaceFree(nextStep)) {
 			sneak1.moveSneak(false);
 		}
-		else
-		{
+		else {
 			map.gameContinue = 0;
 		}
-
-
-
-
-
 	} while (map.gameContinue);
 
-coordin ccc = map.getLeftUpCorrner();
+	coordin ccc = map.getLeftUpCorrner();
 	ccc.x += (map.getWidth() / 2);
 	ccc.y += (map.getHeight() + 3 );
 
 	SetConsoleCursorPosition(h, ccc.coordinToCOORD());
 	putchar(' ');
-	cout << "LastMove: " << sneak1.lastMoveText;
+	//cout << "LastMove: " << sneak1.lastMoveText;
 
 	coordin cc = map.getLeftUpCorrner();
 	cc.x += (map.getWidth() / 2);
